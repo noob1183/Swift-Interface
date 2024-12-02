@@ -337,7 +337,7 @@ function UIsManager.ToggleOpenableUI(Object: GuiObject, ToggleOption: boolean)
 	if typeof(Object) ~= 'Instance' or not Object:IsA('GuiObject') or not Object:GetAttribute('Openable') then warn('Object is not a valid gui object to toggle or is not openable!') return end
 
 	local FrameInitialPosition = InitialUIsValuesList.Position[Object]
-	
+
 	Object.Visible = ToggleOption
 
 	if ToggleOption then
@@ -398,7 +398,7 @@ function UIsManager.ToggleSectionFrame(SectionName: string, FrameName: string, T
 
 	if CleanLastFrame then
 		for _, Obj in FramesList do
-			if Obj:GetAttribute('SectionName') == SectionName then
+			if Obj:IsA('GuiObject') and Obj:GetAttribute('SectionName') == SectionName then
 				Obj.Visible = Obj.Name == FrameName
 			end
 		end
