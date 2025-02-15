@@ -1,6 +1,5 @@
 export type Events = 'Activated' | 'MouseEnter' | 'MouseLeave'
 export type CallbackSetTypes = 'OpenEffectInit' | 'ButtonEvent' | 'OpenEffect' | 'UIToggleSideEffect' | 'CreateNewUIEventsEffect' | 'CreateNewSideUIEventsEffect'
-export type InfoType = 'BorderInfo'? | 'RotateInfo'?
 
 export type SoundDatas = {
 	SoundId: number? | string?;
