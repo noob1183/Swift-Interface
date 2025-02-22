@@ -7,7 +7,7 @@ export type SoundDatas = {
 	PlaybackSpeed: number;
 }
 export type Datas = {
-	AnimateDatas: {ObjectToAnimate: GuiObject? | GuiButton?, ButtonEventType: 'Activated' | 'MouseEnter' | 'MouseLeave', ButtonInitialValues: {Position: UDim2, Rotation: number, Size: UDim2}};
+	AnimateDatas: {ObjectToAnimate: GuiObject? | GuiButton?, ButtonEventType: 'Activated' | 'MouseEnter' | 'MouseLeave', AnimateObjectInitialValues: {Position: UDim2, Rotation: number, Size: UDim2}};
 	ButtonDatas: {AnimationType: string, AnimationIntensity: number, BorderEffect: any, BorderColor: Color3, BorderSize: number, RotateEffect: any, RotateIntensity: number, ClickSound: string, HoverSound: string}
 }
 
@@ -18,6 +18,8 @@ local RunService = game:GetService('RunService')
 local UI_Utils = {}
 
 if not RunService:IsClient() then
+	-- // This is for autocomplete purpose. If return nil raw then no autcomplete.
+	
 	local Result = {
 		Utils = UI_Utils;
 	}
@@ -92,6 +94,9 @@ local SoundsFolder = workspace:FindFirstChild('Sounds') or (function()
 
 	return Folder
 end)()
+
+local CurrentOpenObject = nil
+local CurrentOpenSection = nil
 
 function Lists_Util._SideFuncs.GetButtonDatas(Button: GuiButton)
 	return {
@@ -269,10 +274,10 @@ function UI_Utils.SetupButtonAnimation(Button: GuiButton)
 		In = function(DatasToAnimate: Datas)
 			local AnimateObject = DatasToAnimate.AnimateDatas.ObjectToAnimate
 			
-			local OriginalRotation = DatasToAnimate.AnimateDatas.ButtonInitialValues.Rotation
+			local OriginalRotation = DatasToAnimate.AnimateDatas.AnimateObjectInitialValues.Rotation
 			if not OriginalRotation then warn(`Failed to find orignal rotation for {Button.Name}!`) return end
 
-			local OriginalSize = DatasToAnimate.AnimateDatas.ButtonInitialValues.Size
+			local OriginalSize = DatasToAnimate.AnimateDatas.AnimateObjectInitialValues.Size
 			if not OriginalSize then warn(`Failed to find original size for {Button.Name}!!`) return end
 
 			local HoverSize = UDim2.fromScale(math.clamp(OriginalSize.X.Scale - DatasToAnimate.ButtonDatas.AnimationIntensity, OriginalSize.X.Scale - DatasToAnimate.ButtonDatas.AnimationIntensity, OriginalSize.X.Scale), math.clamp(OriginalSize.Y.Scale - DatasToAnimate.ButtonDatas.AnimationIntensity, OriginalSize.Y.Scale - DatasToAnimate.ButtonDatas.AnimationIntensity, OriginalSize.Y.Scale))
@@ -329,10 +334,10 @@ function UI_Utils.SetupButtonAnimation(Button: GuiButton)
 		Out = function(DatasToAnimate: Datas)
 			local AnimateObject = DatasToAnimate.AnimateDatas.ObjectToAnimate
 
-			local OriginalRotation = DatasToAnimate.AnimateDatas.ButtonInitialValues.Rotation
+			local OriginalRotation = DatasToAnimate.AnimateDatas.AnimateObjectInitialValues.Rotation
 			if not OriginalRotation then warn(`Failed to find orignal rotation for {Button.Name}!`) return end
 
-			local OriginalSize = DatasToAnimate.AnimateDatas.ButtonInitialValues.Size
+			local OriginalSize = DatasToAnimate.AnimateDatas.AnimateObjectInitialValues.Size
 			if not OriginalSize then warn(`Failed to find original size for {Button.Name}!!`) return end
 
 			local HoverSize = UDim2.fromScale(OriginalSize.X.Scale + DatasToAnimate.ButtonDatas.AnimationIntensity, OriginalSize.Y.Scale + DatasToAnimate.ButtonDatas.AnimationIntensity)
@@ -415,14 +420,14 @@ function UI_Utils.SetupButtonAnimation(Button: GuiButton)
 			if not ButtonAnimateDatas then warn(`Failed to get {Button.Name} animate datas!!`) return end
 			
 			local ButtonCallbackFunc = Lists_Util._ButtonsCallbacksList[EventType][Button]
-			local ButtonSideAnimateFunc = Lists_Util._Callbacks.SideUIEventsEffect[ButtonSideAnimateType]
+			local ButtonSideAnimateFunc = if Lists_Util._Callbacks.SideUIEventsEffect then Lists_Util._Callbacks.SideUIEventsEffect[ButtonSideAnimateType] else nil
 			local ButtonAnimateFunc = AnimationsFuncList[ButtonAnimateType]
 			
 			local DatasToAnimate = {
 				AnimateDatas = {
 					ObjectToAnimate = AnimateObject;
 					ButtonEventType = EventType;
-					ButtonInitialValues = UI_Utils.GetUIElementInitialValues(Button)
+					AnimateObjectInitialValues = UI_Utils.GetUIElementInitialValues(AnimateObject)
 				};
 
 				ButtonDatas = ButtonAnimateDatas
@@ -625,9 +630,13 @@ function UI_Utils.GetUIElementInitialValues(Element: GuiObject?): {Position: UDi
 	return Data
 end
 
+function UI_Utils.GetCurrentOpenObjects()
+	return CurrentOpenObject, CurrentOpenSection
+end
+
 return {
 	Utils = UI_Utils;
-	Utils_SideFuncs = Lists_Util._SideFuncs;
+	SideFuncs = Lists_Util._SideFuncs;
 	Packages = (function()
 		local List = {}
 		
