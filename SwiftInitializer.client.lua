@@ -14,7 +14,7 @@ local PlayerGui = Player:FindFirstChild('PlayerGui') or Player:WaitForChild('Pla
 
 local Camera = workspace.CurrentCamera
 
-local Interface_Loader = require(path.to.loader)
+local Interface_Loader = require(script.Loader)
 
 -- local SideEffectInfo = TweenInfo.new(.25)
 
@@ -108,7 +108,7 @@ for _, Component in script.Components:GetChildren() do
 							end
 						end
 					end
-					
+
 					LastFailedComponent = nil
 				end
 			end
@@ -118,4 +118,4 @@ for _, Component in script.Components:GetChildren() do
 	end
 end
 
-  -- GameUI.Enabled = true
+-- GameUI.Enabled = true
