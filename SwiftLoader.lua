@@ -8,7 +8,7 @@ local ConfigurationsReplicatorSignal = ReplicatedStorage:FindFirstChild('Configu
 
 local Modules = ReplicatedStorage.Modules
 
-local SwiftUI = require(Modules.Client.Managers.SwiftInterface)
+local SwiftUI = require(path.to.swiftinterface)
 
 local InitialVisibleSectionsList = {}
 local InterfacesToLoad = {}
