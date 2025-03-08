@@ -33,7 +33,7 @@ end
 
 local Player = Players.LocalPlayer
 
-local Spring = require(script.Packages.Spring)
+local Spring = require(path.to.spring)
 
 local Lists_Util = {
 	_Events = {
