@@ -1,2 +1,4 @@
 # UIs_Utils
-This is a small light framework for gui made by @Tranquananh2811
+A UI(s) framework to increase UI(s) workflow. This framework is fully optimized, has a lot of great features, and is easy to use.
+
+Written by: @Tranquananh2811 (noob1183)
