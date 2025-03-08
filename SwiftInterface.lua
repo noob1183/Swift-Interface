@@ -33,7 +33,7 @@ end
 
 local Player = Players.LocalPlayer
 
-local Spring = require(path.to.spring)
+local Spring = require(script.Packages.Spring)
 
 local Lists_Util = {
 	_Events = {
@@ -480,7 +480,7 @@ function UI_Utils.SetupButtonAnimation(Button: GuiButton)
 	if not Lists_Util._LoadedUIsList[Button.Name] then
 		Lists_Util._LoadedUIsList[Button.Name] = Button
 	end
-	
+
 	Button:SetAttribute('IsLoaded', true)
 end
 
